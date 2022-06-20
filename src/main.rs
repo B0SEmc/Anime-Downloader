@@ -31,5 +31,4 @@ fn downloader(link: &str) {
             println!("An error occurred !");
         }
     }
-
 }
