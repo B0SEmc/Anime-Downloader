@@ -23,12 +23,6 @@ fn downloader(link: &str) {
     cmd.arg(name_cmd);
     cmd.arg(link);
     println!("Downloading... This should take 5-10 minutes");
-    match cmd.output() {
-        Ok(o) => unsafe {
-            println!("{}" ,String::from_utf8_unchecked(o.stdout));
-        },
-        Err(_e) => {
-            println!("An error occurred !");
-        }
-    }
+    cmd.output().expect("Failed to download");
+    println!("Downloaded!");
 }
