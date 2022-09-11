@@ -1,28 +1,33 @@
-use std::io;
-use std::process::Command;
+use std::error::Error;
+use std::io::stdin;
+use std::path::PathBuf;
+use ytd_rs::{YoutubeDL, Arg};
 
 // get the link
-fn main() {
+fn main() -> Result<(), Box<dyn Error>> {
     eprint!("Enter the m3u8 playlist link: ");
     let mut input = String::new();
-    io::stdin().read_line(&mut input).expect("Failed to read link");
+    stdin().read_line(&mut input).expect("Failed to read link");
     let link = input.trim();
-    downloader(link);
+    eprint!("Enter the name: ");
+    let mut input2 = String::new();
+    stdin().read_line(&mut input2).expect("Failed to read name");
+    let name: &str = input2.trim();
+    let name_cmd: String = name.to_string() + ".mp4";
+    download(link, name_cmd)
+
 }
 
 // download the playlist to mp4
-fn downloader(link: &str) {
-    eprint!("Please enter the name of the anime: ");
-    let mut input2 = String::new();
-    io::stdin().read_line(&mut input2).expect("Failed to read name");
-    let name: &str = input2.trim();
-    let name_cmd: String = "-o ".to_owned() + name + ".mp4";
-    let mut cmd = Command::new("yt-dlp");
-    cmd.arg("--all-subs");
-    cmd.arg("-f mp4");
-    cmd.arg(name_cmd);
-    cmd.arg(link);
-    println!("Downloading... This should take 5-10 minutes");
-    cmd.output().expect("Failed to download");
-    println!("Downloaded!");
+fn download(url: &str, name_cmd: String) -> Result<(), Box<dyn Error>> {
+    let args = vec![Arg::new("--all-subs"), Arg::new_with_arg("-f","mp4"), Arg::new_with_arg("--output", &*name_cmd)];
+    let path = PathBuf::from("C:/Divers/Anime Downloader");
+    let ytd = YoutubeDL::new(&path, args, &*url)?;
+
+    println!("Starting download...");
+    let download = ytd.download()?;
+
+    eprint!("Downloading at: {}", download.output());
+    stdin().read_line(&mut "".to_string()).expect("TODO: panic message");
+    Ok(())
 }
