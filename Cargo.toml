@@ -7,3 +7,4 @@ edition = "2021"
 
 [dependencies]
 ytd-rs = "0.1.7"
+indicatif = "0.17.0"

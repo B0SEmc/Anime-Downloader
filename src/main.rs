@@ -1,7 +1,11 @@
 use std::error::Error;
+use std::fmt::Write;
 use std::io::stdin;
 use std::path::PathBuf;
 use ytd_rs::{YoutubeDL, Arg};
+use std::thread;
+use indicatif::{ProgressBar, ProgressStyle, ProgressState};
+use std::time::Duration;
 
 // get the link
 fn main() -> Result<(), Box<dyn Error>> {
@@ -24,10 +28,22 @@ fn download(url: &str, name_cmd: String) -> Result<(), Box<dyn Error>> {
     let path = PathBuf::from("C:/Divers/Anime Downloader");
     let ytd = YoutubeDL::new(&path, args, &*url)?;
 
-    println!("Starting download...");
-    let download = ytd.download()?;
+    println!("Starting download... Approximating 5 minutes as the program is currently unable to get yt-dl's output");
+    thread::spawn(|| {
+        let pb = ProgressBar::new(300);
+        pb.set_style(ProgressStyle::with_template("{spinner:.green} [{elapsed_precise}] [{wide_bar:.cyan/blue}] {bytes}/{total_bytes} ({eta})")
+            .unwrap()
+            .with_key("eta", |state: &ProgressState, w: &mut dyn Write| write!(w, "{:1}s", state.eta().as_secs()).unwrap())
+            .progress_chars("#>-"));
+        for _ in 0..300 {
+            pb.inc(1);
+            thread::sleep(Duration::from_secs(1));
+        }
+        pb.finish_with_message("Done")
+    });
+    let _download = ytd.download()?;
 
-    eprint!("Downloading at: {}", download.output());
+    println!("Done ! Press enter to close");
     stdin().read_line(&mut "".to_string()).expect("TODO: panic message");
     Ok(())
 }
