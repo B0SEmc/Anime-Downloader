@@ -6,5 +6,8 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-ytd-rs = "0.1.7"
 indicatif = "0.17.0"
+
+[dependencies.ytd-rs]
+version = "0.1.7"
+features = ["yt-dlp"]

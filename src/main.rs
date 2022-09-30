@@ -19,7 +19,6 @@ fn main() -> Result<(), Box<dyn Error>> {
     let name: &str = input2.trim();
     let name_cmd: String = name.to_string() + ".mp4";
     download(link, name_cmd)
-
 }
 
 // download the playlist to mp4
@@ -27,6 +26,7 @@ fn download(url: &str, name_cmd: String) -> Result<(), Box<dyn Error>> {
     let args = vec![Arg::new("--all-subs"), Arg::new_with_arg("-f","mp4"), Arg::new_with_arg("--output", &*name_cmd)];
     let path = PathBuf::from("C:/Divers/Anime Downloader");
     let ytd = YoutubeDL::new(&path, args, &*url)?;
+    let download = ytd.download()?;
 
     println!("Starting download... Approximating 5 minutes as the program is currently unable to get yt-dl's output");
     thread::spawn(|| {
@@ -41,9 +41,8 @@ fn download(url: &str, name_cmd: String) -> Result<(), Box<dyn Error>> {
         }
         pb.finish_with_message("Done")
     });
-    let _download = ytd.download()?;
 
-    println!("Done ! Press enter to close");
+    println!("{} Done ! Press enter to close", download.output());
     stdin().read_line(&mut "".to_string()).expect("TODO: panic message");
     Ok(())
 }
