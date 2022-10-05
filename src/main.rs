@@ -1,11 +1,11 @@
+use indicatif::{ProgressBar, ProgressState, ProgressStyle};
 use std::error::Error;
 use std::fmt::Write;
 use std::io::stdin;
 use std::path::PathBuf;
-use ytd_rs::{YoutubeDL, Arg};
 use std::thread;
-use indicatif::{ProgressBar, ProgressStyle, ProgressState};
 use std::time::Duration;
+use ytd_rs::{Arg, YoutubeDL};
 
 // get the link
 fn main() -> Result<(), Box<dyn Error>> {
@@ -23,7 +23,11 @@ fn main() -> Result<(), Box<dyn Error>> {
 
 // download the playlist to mp4
 fn download(url: &str, name_cmd: String) -> Result<(), Box<dyn Error>> {
-    let args = vec![Arg::new("--all-subs"), Arg::new_with_arg("-f","mp4"), Arg::new_with_arg("--output", &*name_cmd)];
+    let args = vec![
+        Arg::new("--all-subs"),
+        Arg::new_with_arg("-f", "mp4"),
+        Arg::new_with_arg("--output", &name_cmd),
+    ];
     let path = PathBuf::from("C:/Divers/Anime Downloader");
     let ytd = YoutubeDL::new(&path, args, &*url)?;
     let download = ytd.download()?;
@@ -37,12 +41,14 @@ fn download(url: &str, name_cmd: String) -> Result<(), Box<dyn Error>> {
             .progress_chars("#>-"));
         for _ in 0..300 {
             pb.inc(1);
-            thread::sleep(Duration::from_secs(1));
+            thread::sleep(Duration::from_millis(1000));
         }
         pb.finish_with_message("Done")
     });
 
     println!("{} Done ! Press enter to close", download.output());
-    stdin().read_line(&mut "".to_string()).expect("TODO: panic message");
+    stdin()
+        .read_line(&mut "".to_string())
+        .expect("TODO: panic message");
     Ok(())
 }
