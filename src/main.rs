@@ -1,10 +1,10 @@
 use indicatif::{ProgressBar, ProgressState, ProgressStyle};
-use std::error::Error;
-use std::fmt::Write;
+use std::fs::File;
 use std::io::stdin;
 use std::path::PathBuf;
 use std::thread;
 use std::time::Duration;
+use std::{error::Error, fmt::Write};
 use ytd_rs::{Arg, YoutubeDL};
 
 // get the link
@@ -30,23 +30,27 @@ fn download(url: &str, name_cmd: String) -> Result<(), Box<dyn Error>> {
     ];
     let path = PathBuf::from("C:/Divers/Anime Downloader");
     let ytd = YoutubeDL::new(&path, args, &*url)?;
-    let download = ytd.download()?;
-
-    println!("Starting download... Approximating 5 minutes as the program is currently unable to get yt-dl's output");
-    thread::spawn(|| {
-        let pb = ProgressBar::new(300);
-        pb.set_style(ProgressStyle::with_template("{spinner:.green} [{elapsed_precise}] [{wide_bar:.cyan/blue}] {bytes}/{total_bytes} ({eta})")
-            .unwrap()
-            .with_key("eta", |state: &ProgressState, w: &mut dyn Write| write!(w, "{:1}s", state.eta().as_secs()).unwrap())
-            .progress_chars("#>-"));
-        for _ in 0..300 {
-            pb.inc(1);
-            thread::sleep(Duration::from_millis(1000));
-        }
-        pb.finish_with_message("Done")
+    thread::spawn(move || {
+        let download = ytd.download();
+        return download;
     });
+    let filepath = "".to_string() + &name_cmd + ".part";
+    thread::sleep(Duration::from_secs(6));
 
-    println!("{} Done ! Press enter to close", download.output());
+    println!("Starting download...");
+    let pb = ProgressBar::new(450000000);
+    pb.set_style(ProgressStyle::with_template("{spinner:.green} [{elapsed_precise}] [{wide_bar:.cyan/blue}] {bytes}/{total_bytes} ({eta})")
+        .unwrap()
+        .with_key("eta", |state: &ProgressState, w: &mut dyn Write| write!(w, "{:.1}s", state.eta().as_secs_f64()).unwrap())
+        .progress_chars("#>-"));
+    while !pb.is_finished() {
+        let file = File::open(&filepath).unwrap();
+        pb.set_position(file.metadata().unwrap().len());
+        thread::sleep(Duration::from_millis(12))
+    }
+    pb.finish_with_message("Done");
+
+    println!("Done ! Press enter to close");
     stdin()
         .read_line(&mut "".to_string())
         .expect("TODO: panic message");
