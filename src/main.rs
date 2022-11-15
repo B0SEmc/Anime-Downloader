@@ -28,7 +28,8 @@ fn download(url: &str, name_cmd: String) -> Result<(), Box<dyn Error>> {
         Arg::new_with_arg("-f", "mp4"),
         Arg::new_with_arg("--output", &name_cmd),
     ];
-    let path = PathBuf::from("C:/Divers/Anime Downloader");
+    // set the path to the current directory
+    let path = PathBuf::from(".");
     let ytd = YoutubeDL::new(&path, args, &*url)?;
     thread::spawn(move || {
         let download = ytd.download();
@@ -52,7 +53,7 @@ fn download(url: &str, name_cmd: String) -> Result<(), Box<dyn Error>> {
 
     println!("Done ! Press enter to close");
     stdin()
-        .read_line(&mut "".to_string())
+        .read_line(&mut String::new())
         .expect("TODO: panic message");
     Ok(())
 }
