@@ -1,41 +1,47 @@
+use config::{get_config, Config};
 use indicatif::{ProgressBar, ProgressState, ProgressStyle};
+use std::fmt::Write;
 use std::fs::File;
 use std::io::stdin;
 use std::path::PathBuf;
 use std::thread;
 use std::time::Duration;
-use std::{error::Error, fmt::Write};
 use ytd_rs::{Arg, YoutubeDL};
 
+mod config;
+
 // get the link
-fn main() -> Result<(), Box<dyn Error>> {
+fn main() {
+    let mut config: Config = get_config();
+
     eprint!("Enter the m3u8 playlist link: ");
     let mut input = String::new();
     stdin().read_line(&mut input).expect("Failed to read link");
     let link = input.trim();
-    eprint!("Enter the name: ");
-    let mut input2 = String::new();
-    stdin().read_line(&mut input2).expect("Failed to read name");
-    let name: &str = input2.trim();
-    let name_cmd: String = name.to_string() + ".mp4";
-    download(link, name_cmd)
+    // increase epidoce count
+    config.episode_count += 1;
+    config.save();
+    download(link, config);
 }
 
 // download the playlist to mp4
-fn download(url: &str, name_cmd: String) -> Result<(), Box<dyn Error>> {
+fn download(url: &str, config: Config) {
     let args = vec![
         Arg::new("--all-subs"),
         Arg::new_with_arg("-f", "mp4"),
-        Arg::new_with_arg("--output", &name_cmd),
+        Arg::new_with_arg(
+            "--output",
+            &format!("{} E{}.mp4", config.name, config.episode_count),
+        ),
     ];
-    let path = PathBuf::from("C:/Divers/Anime Downloader");
-    let ytd = YoutubeDL::new(&path, args, &*url)?;
+    let path = PathBuf::from(".");
+    let ytd = YoutubeDL::new(&path, args, &*url).unwrap();
     thread::spawn(move || {
         let download = ytd.download();
         return download;
     });
-    let filepath = "".to_string() + &name_cmd + ".part";
-    thread::sleep(Duration::from_secs(6));
+    let filepath = String::from(format!("{} E{}.mp4", config.name, config.episode_count) + ".part");
+    thread::sleep(Duration::from_secs(5));
 
     println!("Starting download...");
     let pb = ProgressBar::new(450000000);
@@ -54,5 +60,4 @@ fn download(url: &str, name_cmd: String) -> Result<(), Box<dyn Error>> {
     stdin()
         .read_line(&mut "".to_string())
         .expect("TODO: panic message");
-    Ok(())
 }
