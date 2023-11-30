@@ -15,7 +15,7 @@ fn main() {
     let mut config: Config = get_config();
 
     eprint!("Enter the m3u8 playlist link: ");
-    let mut input = String::new();
+    let mut input = String::default();
     stdin().read_line(&mut input).expect("Failed to read link");
     let link = input.trim();
     // increase episode count
