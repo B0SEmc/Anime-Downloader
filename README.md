@@ -7,7 +7,7 @@
 A simple anime downloader that uses yt-dlp, just put in the link to the episodes and it will download them for you.
 
 ## Dependencies
-(yt-dlp)[https://github.com/yt-dlp/yt-dlp]
+[yt-dlp](https://www.github.com/yt-dlp/yt-dlp)
 
 ## Building
 ```bash
