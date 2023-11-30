@@ -18,7 +18,7 @@ fn main() {
     let mut input = String::new();
     stdin().read_line(&mut input).expect("Failed to read link");
     let link = input.trim();
-    // increase epidoce count
+    // increase episode count
     config.episode_count += 1;
     config.save();
     download(link, config);

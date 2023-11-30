@@ -3,5 +3,21 @@
 [![DeepSource](https://deepsource.io/gh/B0SEmc/Anime-Downloader.svg/?label=active+issues&token=OT1ncXYOtJsgq5kxkSkv8dz6)](https://deepsource.io/gh/B0SEmc/Anime-Downloader/?ref=repository-badge)
 [![dependency status](https://deps.rs/repo/github/B0SEmc/Anime-Downloader/status.svg)](https://deps.rs/repo/github/B0SEmc/Anime-Downloader)
 
-## A software made to download anime from various sites, uses yt-dlp.
-Lots of features are still to be added but for now works as a basic CLI tool for youtube-dl.
+## About
+A simple anime downloader that uses yt-dlp, just put in the link to the episodes and it will download them for you.
+
+## Dependencies
+(yt-dlp)[https://github.com/yt-dlp/yt-dlp]
+
+## Building
+```bash
+git clone
+cd Anime-Downloader
+cargo build --release
+```
+
+## Usage
+Open the program, edit the config file that is automatically created with your anime name and then run the program again.
+
+## Contributing
+Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
