@@ -13,6 +13,9 @@ impl Config {
         let configfile = toml::to_string(&self).unwrap();
         fs::write("animed.toml", configfile).unwrap();
     }
+}
+
+impl Default for Config {
     fn default() -> Self {
         Config {
             name: String::from("Anime name"),
