@@ -17,7 +17,7 @@ fn main() {
             config.episode_count += 1;
             config.save();
             println!("Done! Press enter to exit");
-            if config.auto_close {
+            if !config.auto_close {
                 stdin().read_line(&mut String::default()).unwrap();
             }
             std::process::exit(0);
