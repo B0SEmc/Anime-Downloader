@@ -6,16 +6,16 @@ mod config;
 mod download;
 
 fn main() {
-    let config: Config = get_config();
+    let mut config: Config = get_config();
 
     eprint!("Enter the m3u8 playlist link: ");
     let mut input = String::default();
     stdin().read_line(&mut input).expect("Failed to read link");
     let link = input.trim();
+    config.episode_count += 1;
+    config.save();
     match download(link, config) {
-        Ok(mut config) => {
-            config.episode_count += 1;
-            config.save();
+        Ok(config) => {
             println!("Done! Press enter to exit");
             if !config.auto_close {
                 stdin().read_line(&mut String::default()).unwrap();
