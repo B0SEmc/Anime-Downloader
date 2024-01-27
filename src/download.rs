@@ -27,7 +27,7 @@ pub fn download(url: &str, config: Config) -> Result<Config, &str> {
             &format!("{} E{}.mp4", config.name, config.episode_count),
         ),
     ];
-    let path = PathBuf::from("./");
+    let path = PathBuf::from(".");
     let ytd = YoutubeDL::new(&path, args, url).unwrap();
     thread::spawn(move || {
         let _ = ytd.download();

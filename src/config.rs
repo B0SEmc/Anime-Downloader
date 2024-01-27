@@ -26,7 +26,7 @@ impl Default for Config {
 }
 
 pub fn get_config() -> Config {
-    let configfile = match fs::read_to_string("./animed.toml") {
+    let configfile = match fs::read_to_string("animed.toml") {
         Ok(configfile) => configfile,
         Err(_) => {
             let config = Config::default();
