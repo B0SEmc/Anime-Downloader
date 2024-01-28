@@ -2,7 +2,7 @@
 
 [![DeepSource](https://deepsource.io/gh/B0SEmc/Anime-Downloader.svg/?label=active+issues&token=OT1ncXYOtJsgq5kxkSkv8dz6)](https://deepsource.io/gh/B0SEmc/Anime-Downloader/?ref=repository-badge)
 
-[![image](https://i.imgur.com/8eSTQM2.png)
+![image](https://i.imgur.com/8eSTQM2.png)
 
 ## About
 A simple anime downloader that uses yt-dlp, just put in the link to the episodes and it will download them for you.
