@@ -2,11 +2,13 @@ use config::{check_config_exists, get_config, no_config_found, Config};
 
 #[cfg(windows)]
 use winapi::um::wincon::GetConsoleWindow;
+
+#[cfg(windows)]
 use winapi::um::winuser::{ShowWindow, SW_HIDE};
 
 use download::download;
 use eframe::egui;
-use std::{thread, time::Duration};
+use std::thread;
 
 mod config;
 mod download;
@@ -57,7 +59,6 @@ impl eframe::App for MyApp {
 
                 ctx.set_style(style);
                 thread::spawn(move || {
-                    thread::sleep(Duration::from_secs(1));
                     let window = unsafe { GetConsoleWindow() };
                     unsafe {
                         ShowWindow(window, SW_HIDE);
