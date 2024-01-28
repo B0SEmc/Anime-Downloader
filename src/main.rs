@@ -78,6 +78,7 @@ impl eframe::App for MyApp {
                     thread::spawn(move || {
                         download(link.trim(), do_config_stuff()).unwrap();
                     });
+                    self.anime_link = String::default();
                 }
                 if ui.button("Open config").clicked() {
                     config::open_config();
