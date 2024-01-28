@@ -32,8 +32,6 @@ fn main() {
     }
     let options = eframe::NativeOptions {
         viewport: egui::ViewportBuilder::default().with_inner_size([480.0, 300.0]),
-        follow_system_theme: false,
-        default_theme: eframe::Theme::Light,
         ..Default::default()
     };
     eframe::run_native(
