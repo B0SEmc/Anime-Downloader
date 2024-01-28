@@ -44,23 +44,26 @@ fn main() {
 
 impl eframe::App for MyApp {
     fn update(&mut self, ctx: &egui::Context, _frame: &mut eframe::Frame) {
-        static mut STARTUP: bool = true;
-        if unsafe { STARTUP } {
-            unsafe {
-                STARTUP = false;
-            }
-            ctx.set_pixels_per_point(1.2);
-            let mut style = egui::Style::default();
-            style.spacing.item_spacing = egui::vec2(6.0, 10.0);
-
-            ctx.set_style(style);
-            thread::spawn(move || {
-                thread::sleep(Duration::from_secs(1));
-                let window = unsafe { GetConsoleWindow() };
+        #[cfg(windows)]
+        {
+            static mut STARTUP: bool = true;
+            if unsafe { STARTUP } {
                 unsafe {
-                    ShowWindow(window, SW_HIDE);
+                    STARTUP = false;
                 }
-            });
+                ctx.set_pixels_per_point(1.2);
+                let mut style = egui::Style::default();
+                style.spacing.item_spacing = egui::vec2(6.0, 10.0);
+
+                ctx.set_style(style);
+                thread::spawn(move || {
+                    thread::sleep(Duration::from_secs(1));
+                    let window = unsafe { GetConsoleWindow() };
+                    unsafe {
+                        ShowWindow(window, SW_HIDE);
+                    }
+                });
+            }
         }
         egui::CentralPanel::default().show(ctx, |ui| {
             ui.heading("Anime Downloader");
