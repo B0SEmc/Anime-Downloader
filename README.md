@@ -4,6 +4,8 @@
 
 ![image](https://i.imgur.com/8eSTQM2.png)
 
+![image2](https://i.imgur.com/QbEaqBE.png)
+
 ## About
 A simple anime downloader that uses yt-dlp, just put in the link to the episodes and it will download them for you.
 
