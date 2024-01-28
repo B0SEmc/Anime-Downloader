@@ -27,4 +27,4 @@ Pull requests are welcome. For major changes, please open an issue first to disc
 
 ## Special thanks
 ![Fairy-Jeux](https://avatars.githubusercontent.com/u/54899275?v=4&s=50)
-Fairy-Jeux for testing on MacOS and bug testing.
+@Fairy-Jeux for testing on MacOS and bug testing.
