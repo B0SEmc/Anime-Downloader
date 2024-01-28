@@ -26,5 +26,4 @@ Open the program, edit the config file that is automatically created with your a
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
 
 ## Special thanks
-![Fairy-Jeux](https://avatars.githubusercontent.com/u/54899275?v=4&s=50)
-@Fairy-Jeux for testing on MacOS and bug testing.
+[@Fairy-Jeux](https://github.com/Fairy-Jeux): for testing on MacOS and bug testing.
