@@ -74,9 +74,9 @@ impl eframe::App for MyApp {
             ui.horizontal(|ui| {
                 if ui.button("Download").clicked() {
                     let link = self.anime_link.clone();
-                    println!("Downloading {}", link);
-                    thread::spawn(move || {
-                        download(link.trim(), do_config_stuff()).unwrap();
+                    thread::spawn(move || match download(link.trim(), do_config_stuff()) {
+                        Ok(_) => println!("Download started successfully"),
+                        Err(e) => println!("Error: {}", e),
                     });
                     self.anime_link = String::default();
                 }
