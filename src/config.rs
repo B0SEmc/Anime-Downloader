@@ -1,10 +1,11 @@
 use serde::{Deserialize, Serialize};
-use std::{fs, io::stdin};
+use std::{fs, io::stdin, path::PathBuf};
 
 #[derive(Clone, Deserialize, Serialize)]
 pub struct Config {
     pub name: String,
     pub episode_count: u32,
+    pub download_path: PathBuf,
 }
 
 impl Config {
@@ -19,6 +20,7 @@ impl Default for Config {
         Config {
             name: String::from("Anime name"),
             episode_count: 0,
+            download_path: PathBuf::from(".")
         }
     }
 }
@@ -27,6 +29,16 @@ pub fn set_anime_name(name: String) {
     let mut config = get_config();
     config.name = name;
     config.save();
+}
+
+pub fn set_download_path(new_path: String) {
+    let mut config = get_config();
+    let path = PathBuf::from(new_path);
+    match path.try_exists() {
+        Ok(true) => {config.download_path = path; config.save();},
+        Ok(false) => {println!("This path doesn't exist")},
+        Err(_) => {println!("A problem occured while verifying the path.")},
+    }
 }
 
 pub fn set_episode_count(count: u32) {
