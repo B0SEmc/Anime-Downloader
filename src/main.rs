@@ -88,6 +88,7 @@ impl eframe::App for MyApp {
             ui.horizontal(|ui| {
                 ui.label(format!("Episode count: {}", get_config().episode_count + 1));
                 if ui.button("➖").clicked() {
+
                     let mut config = get_config();
                     if config.episode_count != 0 {
                         config.episode_count -= 1;

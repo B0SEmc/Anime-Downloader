@@ -15,6 +15,13 @@ fn check_file_exists(path: &str) -> bool {
     false
 }
 
+fn final_check_file_exists(path: &str) -> bool {
+    if Path::new(path).exists() {
+        return true;
+    }
+    false
+}
+
 pub fn download(url: &str, config: Config) -> Result<Config, &str> {
     let args = vec![
         Arg::new("--all-subs"),
@@ -33,6 +40,9 @@ pub fn download(url: &str, config: Config) -> Result<Config, &str> {
     let filepath = finalfile.clone() + ".part";
 
     if !check_file_exists(&filepath) {
+        if final_check_file_exists(&finalfile) {
+            return Ok(config);
+        }
         return Err("Failed to start download, make sure you have yt-dlp installed and that the URL is correct.");
     }
     Ok(config)
