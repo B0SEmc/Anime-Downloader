@@ -51,7 +51,7 @@ pub fn set_download_path(new_path: String) {
 pub fn get_download_path() -> String {
     let config = get_config();
     if config.download_path.to_str().unwrap() == "." {
-        return ". (current directory)".to_owned();
+        ". (current directory)".to_owned()
     } else {
         config.download_path.to_str().unwrap().to_string()
     }
