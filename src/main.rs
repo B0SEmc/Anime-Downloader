@@ -17,6 +17,7 @@ mod download;
 struct MyApp {
     anime_link: String,
     anime_name: String,
+    download_path: String,
 }
 
 fn do_config_stuff() -> Config {
@@ -88,8 +89,10 @@ impl eframe::App for MyApp {
                 ui.label(format!("Episode count: {}", get_config().episode_count + 1));
                 if ui.button("➖").clicked() {
                     let mut config = get_config();
-                    config.episode_count -= 1;
-                    config.save();
+                    if config.episode_count != 0 {
+                        config.episode_count -= 1;
+                        config.save();
+                    }
                 }
                 if ui.button("➕").clicked() {
                     let mut config = get_config();
@@ -98,6 +101,20 @@ impl eframe::App for MyApp {
                 }
                 if ui.button("Reset").clicked() {
                     config::set_episode_count(0);
+                }
+            });
+            self.download_path = get_config().download_path.to_str().unwrap().to_string();
+            ui.horizontal(|ui| {
+                ui.add(
+                    egui::TextEdit::singleline(&mut self.download_path).hint_text(format!(
+                        "Download path : {}",
+                        get_config().download_path.to_str().unwrap()
+                    )),
+                );
+                if ui.button("Edit").clicked() {
+                    config::set_download_path(self.download_path.clone());
+                    // uncomment to reset the path when edited
+                    // self.download_path = String::default();
                 }
             });
             ui.horizontal(|ui| {

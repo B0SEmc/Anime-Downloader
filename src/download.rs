@@ -1,10 +1,9 @@
 use std::path::Path;
-use std::path::PathBuf;
 use std::thread;
 use std::time::Duration;
 use ytd_rs::{Arg, YoutubeDL};
 
-use crate::config::Config;
+use crate::config::{Config, get_config};
 
 fn check_file_exists(path: &str) -> bool {
     for _ in 0..9 {
@@ -25,7 +24,7 @@ pub fn download(url: &str, config: Config) -> Result<Config, &str> {
             &format!("{} E{}.mp4", config.name, config.episode_count),
         ),
     ];
-    let path = PathBuf::from(".");
+    let path = get_config().download_path;
     let ytd = YoutubeDL::new(&path, args, url).unwrap();
     thread::spawn(move || {
         let _ = ytd.download();
