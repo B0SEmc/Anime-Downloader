@@ -1,4 +1,4 @@
-use config::{check_config_exists, get_config, no_config_found, Config};
+use config::{check_config_exists, get_config, get_download_path, no_config_found, Config};
 
 #[cfg(windows)]
 use winapi::um::wincon::GetConsoleWindow;
@@ -32,7 +32,7 @@ fn main() {
         no_config_found()
     }
     let options = eframe::NativeOptions {
-        viewport: egui::ViewportBuilder::default().with_inner_size([480.0, 300.0]),
+        viewport: egui::ViewportBuilder::default().with_inner_size([480.0, 330.0]),
         ..Default::default()
     };
     eframe::run_native(
@@ -70,7 +70,7 @@ impl eframe::App for MyApp {
             ui.add(
                 egui::TextEdit::multiline(&mut self.anime_link)
                     .hint_text("Anime link")
-                    .desired_width(400.0),
+                    .desired_width(f32::INFINITY),
             );
             ui.horizontal(|ui| {
                 if ui.button("Download").clicked() {
@@ -88,7 +88,6 @@ impl eframe::App for MyApp {
             ui.horizontal(|ui| {
                 ui.label(format!("Episode count: {}", get_config().episode_count + 1));
                 if ui.button("➖").clicked() {
-
                     let mut config = get_config();
                     if config.episode_count != 0 {
                         config.episode_count -= 1;
@@ -104,28 +103,26 @@ impl eframe::App for MyApp {
                     config::set_episode_count(0);
                 }
             });
-            self.download_path = get_config().download_path.to_str().unwrap().to_string();
-            ui.horizontal(|ui| {
-                ui.add(
-                    egui::TextEdit::singleline(&mut self.download_path).hint_text(format!(
-                        "Download path : {}",
-                        get_config().download_path.to_str().unwrap()
-                    )),
-                );
-                if ui.button("Edit").clicked() {
-                    config::set_download_path(self.download_path.clone());
-                    // uncomment to reset the path when edited
-                    // self.download_path = String::default();
-                }
-            });
             ui.horizontal(|ui| {
                 ui.add(
                     egui::TextEdit::singleline(&mut self.anime_name)
-                        .hint_text(format!("Name: {}", get_config().name)),
+                        .hint_text(format!("Name: {}", get_config().name))
+                        .desired_width(330.0),
                 );
                 if ui.button("Edit").clicked() {
                     config::set_anime_name(self.anime_name.clone());
                     self.anime_name = String::default();
+                }
+            });
+            ui.horizontal(|ui| {
+                ui.add(
+                    egui::TextEdit::singleline(&mut self.download_path)
+                        .hint_text(format!("Path: {}", get_download_path(),))
+                        .desired_width(330.0),
+                );
+                if ui.button("Edit").clicked() {
+                    config::set_download_path(self.download_path.clone());
+                    self.download_path = String::default();
                 }
             });
         });

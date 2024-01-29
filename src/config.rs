@@ -20,7 +20,7 @@ impl Default for Config {
         Config {
             name: String::from("Anime name"),
             episode_count: 0,
-            download_path: PathBuf::from(".")
+            download_path: PathBuf::from("."),
         }
     }
 }
@@ -35,9 +35,25 @@ pub fn set_download_path(new_path: String) {
     let mut config = get_config();
     let path = PathBuf::from(new_path);
     match path.try_exists() {
-        Ok(true) => {config.download_path = path; config.save();},
-        Ok(false) => {println!("This path doesn't exist")},
-        Err(_) => {println!("A problem occured while verifying the path.")},
+        Ok(true) => {
+            config.download_path = path;
+            config.save();
+        }
+        Ok(false) => {
+            println!("This path doesn't exist")
+        }
+        Err(_) => {
+            println!("A problem occured while verifying the path.")
+        }
+    }
+}
+
+pub fn get_download_path() -> String {
+    let config = get_config();
+    if config.download_path.to_str().unwrap() == "." {
+        return ". (current directory)".to_owned();
+    } else {
+        config.download_path.to_str().unwrap().to_string()
     }
 }
 
