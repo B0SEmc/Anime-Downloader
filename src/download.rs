@@ -3,7 +3,7 @@ use std::thread;
 use std::time::Duration;
 use ytd_rs::{Arg, YoutubeDL};
 
-use crate::config::{Config, get_config};
+use crate::config::{get_config, Config};
 
 fn check_file_exists(path: &str) -> bool {
     for _ in 0..9 {
@@ -36,7 +36,15 @@ pub fn download(url: &str, config: Config) -> Result<Config, &str> {
     thread::spawn(move || {
         let _ = ytd.download();
     });
-    let finalfile = format!("{} E{}.mp4", config.name, config.episode_count);
+    let pathstring = match path.to_str() {
+        Some(".") => "./",
+        Some(p) => p,
+        None => "./",
+    };
+    let finalfile = format!(
+        "{}{} E{}.mp4",
+        pathstring, config.name, config.episode_count
+    );
     let filepath = finalfile.clone() + ".part";
 
     if !check_file_exists(&filepath) {
