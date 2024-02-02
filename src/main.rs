@@ -52,7 +52,6 @@ impl eframe::App for MyApp {
                 unsafe {
                     STARTUP = false;
                 }
-                ctx.set_pixels_per_point(1.2);
                 let mut style = egui::Style::default();
                 style.spacing.item_spacing = egui::vec2(6.0, 10.0);
 
@@ -65,6 +64,7 @@ impl eframe::App for MyApp {
                 });
             }
         }
+        ctx.set_pixels_per_point(1.2);
         egui::CentralPanel::default().show(ctx, |ui| {
             ui.heading("Anime Downloader");
             ui.add(
