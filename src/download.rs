@@ -32,6 +32,8 @@ pub fn download(url: &str, config: Config) -> Result<Config, &str> {
         ),
     ];
     let path = get_config().download_path;
+    // add folder to pathstring
+
     let ytd = YoutubeDL::new(&path, args, url).unwrap();
     thread::spawn(move || {
         let _ = ytd.download();
