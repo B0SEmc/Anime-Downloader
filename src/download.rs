@@ -32,17 +32,22 @@ pub fn download(url: &str, config: Config) -> Result<Config, &str> {
         ),
     ];
     let path = get_config().download_path;
-    let ytd = YoutubeDL::new(&path, args, url).unwrap();
-    thread::spawn(move || {
-        let _ = ytd.download();
-    });
+    let path = if config.folder_per_anime {
+        path.join(&config.name)
+    } else {
+        path.clone()
+    };
     let pathstring = match path.to_str() {
         Some(".") => "./",
         Some(p) => p,
         None => "./",
     };
+    let ytd = YoutubeDL::new(&path, args, url).unwrap();
+    thread::spawn(move || {
+        let _ = ytd.download();
+    });
     let finalfile = format!(
-        "{}{} E{}.mp4",
+        "{}/{} E{}.mp4",
         pathstring, config.name, config.episode_count
     );
     let filepath = finalfile.clone() + ".part";

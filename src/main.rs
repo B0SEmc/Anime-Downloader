@@ -84,6 +84,14 @@ impl eframe::App for MyApp {
                 if ui.button("Open config").clicked() {
                     config::open_config();
                 }
+                if ui
+                    .checkbox(&mut get_config().folder_per_anime, "Folder per anime")
+                    .changed()
+                {
+                    let mut config = get_config();
+                    config.folder_per_anime = !config.folder_per_anime;
+                    config.save();
+                }
             });
             ui.horizontal(|ui| {
                 ui.label(format!("Episode count: {}", get_config().episode_count + 1));

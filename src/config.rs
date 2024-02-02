@@ -6,6 +6,7 @@ pub struct Config {
     pub name: String,
     pub episode_count: u32,
     pub download_path: PathBuf,
+    pub folder_per_anime: bool,
 }
 
 impl Config {
@@ -21,6 +22,7 @@ impl Default for Config {
             name: String::from("Anime name"),
             episode_count: 0,
             download_path: PathBuf::from("."),
+            folder_per_anime: false,
         }
     }
 }
