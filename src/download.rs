@@ -32,9 +32,10 @@ pub fn download(url: &str, config: Config) -> Result<Config, &str> {
         ),
     ];
     let path = get_config().download_path;
-    let path = match config.folder_per_anime {
-        true => path.join(&config.name),
-        false => path.clone(),
+    let path = if config.folder_per_anime {
+        path.join(&config.name)
+    } else {
+        path.clone()
     };
     let pathstring = match path.to_str() {
         Some(".") => "./",
