@@ -1,5 +1,5 @@
 use serde::{Deserialize, Serialize};
-use std::{fs, io::stdin, path::PathBuf};
+use std::{fs, io::stdin, path::PathBuf, thread, time::Duration};
 
 #[derive(Clone, Deserialize, Serialize)]
 pub struct Config {
@@ -76,22 +76,32 @@ pub fn check_config_exists() -> bool {
 pub fn no_config_found() {
     let config = Config::default();
     config.save();
-    println!("Created config file, please edit it and restart the program");
+    println!("Created config file, please restart the program");
     stdin().read_line(&mut String::default()).unwrap();
     std::process::exit(0);
 }
 
 pub fn get_config() -> Config {
+    thread::sleep(Duration::from_millis(3));
     let configfile = match fs::read_to_string("animed.toml") {
         Ok(configfile) => configfile,
         Err(_) => {
             let config = Config::default();
             config.save();
-            println!("Created config file, please edit it and restart the program");
+            println!("Created config file, please restart the program");
             stdin().read_line(&mut String::default()).unwrap();
             std::process::exit(0);
         }
     };
-    let config: Config = toml::from_str(&configfile).unwrap();
+    let config: Config = match toml::from_str(&configfile) {
+        Result::Ok(config) => config,
+        Result::Err(_) => {
+            println!(
+                "Error while reading the config file, please check it and restart the program"
+            );
+            stdin().read_line(&mut String::default()).unwrap();
+            std::process::exit(420);
+        }
+    };
     config
 }
