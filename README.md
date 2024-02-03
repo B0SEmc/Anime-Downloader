@@ -12,15 +12,19 @@ A simple anime downloader that uses yt-dlp, just put in the link to the episodes
 ## Dependencies
 [yt-dlp](https://www.github.com/yt-dlp/yt-dlp)
 
+## Usage
+- make sure yt-dlp is installed and in your PATH
+- get the link to the episode(s), we recommend using [HLS Downloader](https://github.com/puemos/hls-downloader) to extract the link from websites.
+- set the settings you want in the program
+- put the link in the big text box
+- click download!
+
 ## Building
 ```bash
 git clone
 cd Anime-Downloader
 cargo build --release
 ```
-
-## Usage
-Open the program, edit the config file that is automatically created with your anime name and then run the program again.
 
 ## Contributing
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
