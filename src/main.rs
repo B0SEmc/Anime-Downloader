@@ -1,4 +1,7 @@
-use config::{check_config_exists, get_config, get_download_path, no_config_found, Config};
+use config::{
+    check_config_exists, get_config, get_download_path, no_config_found, set_folder_per_anime,
+    Config,
+};
 
 #[cfg(windows)]
 use winapi::um::wincon::GetConsoleWindow;
@@ -65,6 +68,7 @@ impl eframe::App for MyApp {
             }
         }
         ctx.set_pixels_per_point(1.2);
+        let mut config = get_config();
         egui::CentralPanel::default().show(ctx, |ui| {
             ui.heading("Anime Downloader");
             ui.add(
@@ -85,25 +89,19 @@ impl eframe::App for MyApp {
                     config::open_config();
                 }
                 if ui
-                    .checkbox(&mut get_config().folder_per_anime, "Folder per anime")
+                    .checkbox(&mut config.folder_per_anime, "Folder per anime")
                     .changed()
                 {
-                    let mut config = get_config();
-                    config.folder_per_anime = !config.folder_per_anime;
-                    config.save();
+                    set_folder_per_anime();
                 }
             });
             ui.horizontal(|ui| {
-                ui.label(format!("Episode count: {}", get_config().episode_count + 1));
-                if ui.button("➖").clicked() {
-                    let mut config = get_config();
-                    if config.episode_count != 0 {
-                        config.episode_count -= 1;
-                        config.save();
-                    }
+                ui.label(format!("Episode count: {}", config.episode_count + 1));
+                if ui.button("➖").clicked() && config.episode_count != 0 {
+                    config.episode_count -= 1;
+                    config.save();
                 }
                 if ui.button("➕").clicked() {
-                    let mut config = get_config();
                     config.episode_count += 1;
                     config.save();
                 }
@@ -114,7 +112,7 @@ impl eframe::App for MyApp {
             ui.horizontal(|ui| {
                 ui.add(
                     egui::TextEdit::singleline(&mut self.anime_name)
-                        .hint_text(format!("Name: {}", get_config().name))
+                        .hint_text(format!("Name: {}", config.name))
                         .desired_width(330.0),
                 );
                 if ui.button("Edit").clicked() {

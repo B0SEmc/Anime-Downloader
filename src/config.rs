@@ -65,6 +65,12 @@ pub fn set_episode_count(count: u32) {
     config.save();
 }
 
+pub fn set_folder_per_anime() {
+    let mut config = get_config();
+    config.folder_per_anime = !config.folder_per_anime;
+    config.save();
+}
+
 pub fn open_config() {
     let _ = open::that("animed.toml");
 }
@@ -82,7 +88,7 @@ pub fn no_config_found() {
 }
 
 pub fn get_config() -> Config {
-    thread::sleep(Duration::from_millis(3));
+    thread::sleep(Duration::from_micros(500));
     let configfile = match fs::read_to_string("animed.toml") {
         Ok(configfile) => configfile,
         Err(_) => {
