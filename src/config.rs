@@ -79,24 +79,16 @@ pub fn check_config_exists() -> bool {
     fs::read_to_string("animed.toml").is_ok()
 }
 
-pub fn no_config_found() {
-    let config = Config::default();
-    config.save();
-    println!("Created config file, please restart the program");
-    stdin().read_line(&mut String::default()).unwrap();
-    std::process::exit(0);
-}
-
 pub fn get_config() -> Config {
     thread::sleep(Duration::from_micros(500));
     let configfile = match fs::read_to_string("animed.toml") {
         Ok(configfile) => configfile,
         Err(_) => {
+            // Create the config file if it doesn't exist
             let config = Config::default();
             config.save();
-            println!("Created config file, please restart the program");
-            stdin().read_line(&mut String::default()).unwrap();
-            std::process::exit(0);
+            println!("Created config file");
+            return config;
         }
     };
     let config: Config = match toml::from_str(&configfile) {
