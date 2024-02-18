@@ -1,7 +1,4 @@
-use config::{
-    check_config_exists, get_config, get_download_path, no_config_found, set_folder_per_anime,
-    Config,
-};
+use config::{check_config_exists, get_config, get_download_path, set_folder_per_anime, Config};
 
 #[cfg(windows)]
 use winapi::um::wincon::GetConsoleWindow;
@@ -32,7 +29,7 @@ fn do_config_stuff() -> Config {
 
 fn main() {
     if !check_config_exists() {
-        no_config_found()
+        get_config();
     }
     let options = eframe::NativeOptions {
         viewport: egui::ViewportBuilder::default().with_inner_size([480.0, 330.0]),
@@ -123,7 +120,7 @@ impl eframe::App for MyApp {
             ui.horizontal(|ui| {
                 ui.add(
                     egui::TextEdit::singleline(&mut self.download_path)
-                        .hint_text(format!("Path: {}", get_download_path(),))
+                        .hint_text(format!("Path: {}", get_download_path()))
                         .desired_width(330.0),
                 );
                 if ui.button("Edit").clicked() {
