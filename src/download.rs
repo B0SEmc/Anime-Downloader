@@ -1,4 +1,5 @@
-use std::path::Path;
+use std::fs;
+use std::path::{Path, PathBuf};
 use std::thread;
 use std::time::Duration;
 use ytd_rs::{Arg, YoutubeDL};
@@ -31,7 +32,7 @@ pub fn download(url: &str, config: Config) -> Result<Config, &str> {
             &format!("{} E{}.mp4", config.name, config.episode_count),
         ),
     ];
-    let path = get_config().download_path;
+    let path = &config.download_path;
     let path = if config.folder_per_anime {
         path.join(&config.name)
     } else {
@@ -59,4 +60,24 @@ pub fn download(url: &str, config: Config) -> Result<Config, &str> {
         return Err("Failed to start download, make sure you have yt-dlp installed and that the URL is correct.");
     }
     Ok(config)
+}
+
+pub fn check_downloads_done(config: Config) -> bool {
+    let path = if config.folder_per_anime {
+        config.download_path.join(&config.name)
+    } else {
+        config.download_path
+    };
+
+    if !path.exists() {
+        return false;
+    }
+
+    let entries = fs::read_dir(path).unwrap();
+    for entry in entries {
+        if entry.unwrap().path().to_str().unwrap().contains(".part") {
+            return false;
+        }
+    }
+    true
 }
