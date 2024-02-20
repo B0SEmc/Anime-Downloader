@@ -1,10 +1,10 @@
 use std::fs;
-use std::path::{Path, PathBuf};
+use std::path::Path;
 use std::thread;
 use std::time::Duration;
 use ytd_rs::{Arg, YoutubeDL};
 
-use crate::config::{get_config, Config};
+use crate::config::Config;
 
 fn check_file_exists(path: &str) -> bool {
     for _ in 0..9 {
@@ -36,7 +36,7 @@ pub fn download(url: &str, config: Config) -> Result<Config, &str> {
     let path = if config.folder_per_anime {
         path.join(&config.name)
     } else {
-        path.clone()
+        path.to_path_buf()
     };
     let pathstring = match path.to_str() {
         Some(".") => "./",
@@ -51,7 +51,7 @@ pub fn download(url: &str, config: Config) -> Result<Config, &str> {
         "{}/{} E{}.mp4",
         pathstring, config.name, config.episode_count
     );
-    let filepath = finalfile.clone() + ".part";
+    let filepath = format!("{}.part", finalfile);
 
     if !check_file_exists(&filepath) {
         if final_check_file_exists(&finalfile) {

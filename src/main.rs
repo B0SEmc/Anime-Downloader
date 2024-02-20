@@ -133,7 +133,7 @@ impl eframe::App for MyApp {
             if check_downloads_done(config) {
                 ui.label("All downloads are done");
             } else {
-                ui.label("Downloads are still in progress");
+                ui.colored_label(egui::Color32::WHITE, "Downloads are still in progress");
             }
         });
     }

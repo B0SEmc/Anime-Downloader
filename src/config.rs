@@ -1,5 +1,5 @@
 use serde::{Deserialize, Serialize};
-use std::{fs, io::stdin, path::PathBuf, thread, time::Duration};
+use std::{fs, path::PathBuf, thread, time::Duration};
 
 #[derive(Clone, Deserialize, Serialize)]
 pub struct Config {
@@ -80,7 +80,7 @@ pub fn check_config_exists() -> bool {
 }
 
 pub fn get_config() -> Config {
-    thread::sleep(Duration::from_millis(2));
+    thread::sleep(Duration::from_millis(1));
     let configfile = match fs::read_to_string("animed.toml") {
         Ok(configfile) => configfile,
         Err(_) => {
