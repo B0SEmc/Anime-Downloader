@@ -1,4 +1,5 @@
 use config::{check_config_exists, get_config, get_download_path, set_folder_per_anime, Config};
+use download::check_downloads_done;
 
 #[cfg(windows)]
 use winapi::um::wincon::GetConsoleWindow;
@@ -128,6 +129,12 @@ impl eframe::App for MyApp {
                     self.download_path = String::default();
                 }
             });
+            // check if all downloads are done
+            if check_downloads_done(config) {
+                ui.label("All downloads are done");
+            } else {
+                ui.colored_label(egui::Color32::WHITE, "Downloads are still in progress");
+            }
         });
     }
 }
