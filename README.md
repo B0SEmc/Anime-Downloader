@@ -30,4 +30,4 @@ cargo build --release
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
 
 ## Special thanks
-[@Fairy-Jeux](https://github.com/Fairy-Jeux): for testing on MacOS and bug testing.
+[@Fairy-Jeux](https://github.com/Fairy-Jeux): for helping me test on MacOS
