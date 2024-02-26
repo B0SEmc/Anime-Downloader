@@ -1,3 +1,4 @@
+use notify_rust::Notification;
 use std::fs;
 use std::path::Path;
 use std::thread;
@@ -57,6 +58,13 @@ pub fn download(url: &str, config: Config) -> Result<Config, &str> {
         if final_check_file_exists(&finalfile) {
             return Ok(config);
         }
+        Notification::new()
+            .summary("Download failed")
+            .body("Failed to start download, make sure you have yt-dlp installed and that the URL is correct.")
+            .appname("Anime Downloader")
+            .timeout(0)
+            .show()
+            .unwrap();
         return Err("Failed to start download, make sure you have yt-dlp installed and that the URL is correct.");
     }
     Ok(config)
