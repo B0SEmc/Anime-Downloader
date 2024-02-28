@@ -14,7 +14,7 @@ A simple anime downloader that uses yt-dlp, just put in the link to the episodes
 
 ## Usage
 - make sure yt-dlp is installed and in your PATH
-- get the link to the episode(s), we recommend using [HLS Downloader](https://github.com/puemos/hls-downloader) to extract the link from websites.
+- get the link to the episode(s), we recommend using [HLS Downloader](https://github.com/puemos/hls-downloader) or [cat-catch](https://github.com/xifangczy/cat-catch) to extract the link from websites.
 - set the settings you want in the program
 - put the link in the big text box
 - click download!
