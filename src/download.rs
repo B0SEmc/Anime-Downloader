@@ -27,7 +27,7 @@ fn final_check_file_exists(path: &str) -> bool {
 pub fn download(url: &str, config: Config) -> Result<Config, &str> {
     let args = vec![
         Arg::new("--all-subs"),
-        Arg::new_with_arg("-f", "mp4"),
+        Arg::new_with_arg("-f", "best"),
         Arg::new_with_arg(
             "--output",
             &format!("{} E{}.mp4", config.name, config.episode_count),
@@ -78,14 +78,11 @@ pub fn check_downloads_done(config: Config) -> bool {
     };
 
     if !path.exists() {
-        return false;
+        return true;
     }
 
     let entries = fs::read_dir(path).unwrap();
-    for entry in entries {
-        if entry.unwrap().path().to_str().unwrap().contains(".part") {
-            return false;
-        }
-    }
-    true
+    !entries
+        .filter_map(Result::ok)
+        .any(|entry| entry.path().to_str().unwrap().contains(".part"))
 }
