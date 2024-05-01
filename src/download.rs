@@ -24,7 +24,7 @@ fn final_check_file_exists(path: &str) -> bool {
     false
 }
 
-pub fn download(url: &str, config: Config) -> Result<Config, &str> {
+pub fn download(url: &str, config: Config) -> Result<Config, String> {
     let args = vec![
         Arg::new("--all-subs"),
         Arg::new_with_arg("-f", "best"),
@@ -60,12 +60,18 @@ pub fn download(url: &str, config: Config) -> Result<Config, &str> {
         }
         Notification::new()
             .summary("Download failed")
-            .body("Failed to start download, make sure you have yt-dlp installed and that the URL is correct.")
+            .body(&format!(
+                "Failed to start download for episode {}",
+                config.episode_count
+            ))
             .appname("Anime Downloader")
             .timeout(0)
             .show()
             .unwrap();
-        return Err("Failed to start download, make sure you have yt-dlp installed and that the URL is correct.");
+        return Err(format!(
+            "Failed to start download for episode {}, make sure you have yt-dlp installed and that the URL is correct.",
+            config.episode_count
+        ));
     }
     Ok(config)
 }
