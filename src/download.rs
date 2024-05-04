@@ -5,7 +5,7 @@ use std::thread;
 use std::time::Duration;
 use ytd_rs::{Arg, YoutubeDL};
 
-use crate::config::Config;
+use crate::config::{set_last_link, Config};
 
 fn check_file_exists(path: &str) -> bool {
     for _ in 0..9 {
@@ -25,6 +25,24 @@ fn final_check_file_exists(path: &str) -> bool {
 }
 
 pub fn download(url: &str, config: Config) -> Result<Config, String> {
+    if url == config.last_link {
+        Notification::new()
+            .summary("Download not started")
+            .body(&format!(
+                "Episode {} has already been downloaded",
+                config.episode_count
+            ))
+            .appname("Anime Downloader")
+            .timeout(0)
+            .show()
+            .unwrap();
+        return Err(format!(
+            "Episode {} already downloaded",
+            config.episode_count
+        ));
+    }
+    set_last_link(url.to_string());
+
     let args = vec![
         Arg::new("--all-subs"),
         Arg::new_with_arg("-f", "best"),

@@ -7,6 +7,7 @@ pub struct Config {
     pub episode_count: u32,
     pub download_path: PathBuf,
     pub folder_per_anime: bool,
+    pub last_link: String,
 }
 
 impl Config {
@@ -23,8 +24,15 @@ impl Default for Config {
             episode_count: 0,
             download_path: PathBuf::from("."),
             folder_per_anime: false,
+            last_link: String::default(),
         }
     }
+}
+
+pub fn set_last_link(link: String) {
+    let mut config = get_config();
+    config.last_link = link;
+    config.save();
 }
 
 pub fn set_anime_name(name: String) {
