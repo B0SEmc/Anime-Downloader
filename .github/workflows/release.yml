@@ -3,6 +3,7 @@ name: Rust Release binary
 on:
   release:
     types: [created]
+  push:
 
 jobs:
   release:
